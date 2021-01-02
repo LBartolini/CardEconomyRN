@@ -1,13 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, Modal, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FlatItem from './FlatItem';
-import ModalComponent from './Modal';
 
 export default class Home extends React.Component {
     state = {
-        modalOpen: false,
         isRefreshing: false,
         transactions: [
             {
@@ -21,15 +19,11 @@ export default class Home extends React.Component {
     }
 
     onRefresh = () => {
-        setState({isRefreshing: false});
-    }
-
-    openModal = () => {
-        setState({modalOpen: true});
+        this.setState({isRefreshing: false});
     }
 
     renderItem = ({ item }) => {
-        return (<FlatItem descr={item.descr} costo={item.costo} data={item.data} ricarica={item.ricarica} openModal={this.openModal}/>);
+        return (<FlatItem descr={item.descr} costo={item.costo} data={item.data} ricarica={item.ricarica}/>);
     }
 
     render() {
@@ -40,8 +34,8 @@ export default class Home extends React.Component {
                         <Text style={styles.TextSaldo}>5000€</Text>
                     </View>
                     <View style={styles.ViewButton}>
-                        <TouchableOpacity>
-                            <MaterialCommunityIcons name="plus-thick" color={"lightgreen"} size={45} />
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate("new-transaction")}>
+                            <MaterialCommunityIcons name="plus" color={"lightgreen"} size={45} />
                         </TouchableOpacity>
                     </View>
 
@@ -55,18 +49,6 @@ export default class Home extends React.Component {
                         onRefresh={() => this.onRefresh}
                     />
                 </SafeAreaView>
-                <Modal
-                    animationType="none"
-                    transparent={true}
-                    visible={this.state.modalOpen}
-                >
-                    <View style={{
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}>
-                        <ModalComponent />
-                    </View>
-                </Modal>
                 <StatusBar style="light" />
             </View>
         );

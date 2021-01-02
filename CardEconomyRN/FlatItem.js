@@ -21,7 +21,7 @@ export default class FlatItem extends React.Component {
                     <Text style={{ color: (ricarica ? 'green' : 'orange'), fontSize: 18, flex: 1 }}>{(ricarica ? '' : '-')}{costo} €</Text>
                 </View>
                 <View style={styles.ViewButton}>
-                    <TouchableOpacity onPress={this.props.openModal}>
+                    <TouchableOpacity>
                         <MaterialCommunityIcons color={'lightblue'} size={35} name="minus-box" style={{ alignSelf: 'flex-end' }} />
                     </TouchableOpacity>
                 </View>
