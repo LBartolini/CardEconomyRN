@@ -3,6 +3,11 @@ import { StyleSheet, View, Text, TouchableOpacity, ScrollView, SafeAreaView } fr
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default class FlatItem extends React.Component {
+
+    removeTransaction = () => {
+        //TODO
+    }
+
     render() {
         const descrizione = this.props.descr;
         const data = this.props.data;
@@ -21,7 +26,7 @@ export default class FlatItem extends React.Component {
                     <Text style={{ color: (ricarica ? 'green' : 'orange'), fontSize: 18, flex: 1 }}>{(ricarica ? '' : '-')}{costo} €</Text>
                 </View>
                 <View style={styles.ViewButton}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.removeTransaction()}>
                         <MaterialCommunityIcons color={'lightblue'} size={35} name="minus-box" style={{ alignSelf: 'flex-end' }} />
                     </TouchableOpacity>
                 </View>

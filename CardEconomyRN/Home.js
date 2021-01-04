@@ -19,6 +19,7 @@ export default class Home extends React.Component {
     }
 
     onRefresh = () => {
+        //TODO
         this.setState({isRefreshing: false});
     }
 

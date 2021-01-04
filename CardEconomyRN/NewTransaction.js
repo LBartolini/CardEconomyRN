@@ -3,19 +3,27 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import CheckBox from 'react-native-check-box';
 
 export default class NewTransaction extends React.Component {
     state = {
         date: new Date(),
         dateText: '',
-        show: false
+        show: false,
+        ricaricaChecked: false,
+        importo: '',
+        descrizione: ''
+    }
+
+    sendNewTransaction = () => {
+        //TODO
     }
 
     updateDateText = () => {
-        try{
-        let tmp = this.state.date.getDate() + '/' + (this.state.date.getMonth() + 1) + '/' + this.state.date.getFullYear();
-        this.setState({ dateText: tmp });
-        }catch(e){}
+        try {
+            let tmp = this.state.date.getDate() + '/' + (this.state.date.getMonth() + 1) + '/' + this.state.date.getFullYear();
+            this.setState({ dateText: tmp });
+        } catch (e) { }
     }
 
     componentDidMount() {
@@ -41,11 +49,17 @@ export default class NewTransaction extends React.Component {
                     </View>
                 </View>
                 <View style={styles.Content}>
+
                     <View style={styles.Description}>
                         <Text style={{ color: 'white', fontSize: 24, paddingLeft: 8 }}>Descrizione: </Text>
-                        <TextInput style={styles.InputDescr} multiline={true} maxLength={50}></TextInput>
+                        <TextInput style={styles.InputDescr}
+                            multiline={true}
+                            maxHeight={80}
+                            onChangeText={(value) => this.setState({descrizione: value})}
+                        ></TextInput>
                     </View>
-                    <View style={styles.Description}>
+
+                    <View style={styles.Data}>
                         <Text style={{ color: 'white', fontSize: 24, paddingLeft: 8 }}>Data: </Text>
                         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                             <Text style={{ color: 'white', fontSize: 32, paddingLeft: 16 }}>{this.state.dateText}</Text>
@@ -61,16 +75,47 @@ export default class NewTransaction extends React.Component {
                             onChange={this.onDateChange}
                         />)}
                     </View>
-                    <View style={styles.Description}>
+
+                    <View style={styles.Importo}>
                         <Text style={{ color: 'white', fontSize: 24, paddingLeft: 8 }}>Importo: </Text>
-                        <TextInput style={styles.InputDescr} multiline={true} maxLength={50}></TextInput>
+                        <TextInput 
+                        style={styles.InputImp} 
+                        multiline={false} maxLength={13} 
+                        placeholderTextColor={"lightgray"} placeholder={"Inserisci importo..."}
+                        keyboardType={'numeric'}
+                        onChangeText={(value) => this.setState({importo: value})}
+                        ></TextInput>
                     </View>
-                    <View style={styles.Description}>
+
+                    <View style={styles.Ricarica}>
                         <Text style={{ color: 'white', fontSize: 24, paddingLeft: 8 }}>Ricarica: </Text>
-                        <TextInput style={styles.InputDescr} multiline={true} maxLength={50}></TextInput>
+                        <CheckBox
+                        style={{ marginRight: 24 }}
+                            checkBoxColor={'white'}
+                            onClick={() => {
+                                this.setState({
+                                    ricaricaChecked: !this.state.ricaricaChecked
+                                })
+                            }}
+                            isChecked={this.state.ricaricaChecked}
+                        />
                     </View>
-                    <View style={styles.Description}>
-                        <Text style={{ color: 'white', fontSize: 24, paddingLeft: 8 }}>Conferma </Text>
+
+                    <View style={styles.Confirm}>
+                        <TouchableOpacity onPress={() => this.sendNewTransaction()}
+                            style={{
+                                borderRadius: 10,
+                                backgroundColor: '#3D3D3D',
+                                borderColor: 'black',
+                                borderWidth: 1,
+                                marginRight: 16
+                            }}
+                            >
+                            <Text style={{ color: 'white', 
+                                    fontSize: 24, 
+                                    padding: 20, 
+                                    }}>Conferma </Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <StatusBar style="light" />
@@ -105,7 +150,32 @@ const styles = StyleSheet.create({
     },
 
     Description: {
+        flex: 2,
+    },
+
+    Data: {
         flex: 1,
+    },
+
+    Importo: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+
+    Ricarica: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+
+    Confirm: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center'
     },
 
     InputDescr: {
@@ -114,6 +184,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#3D3D3D',
         borderRadius: 5,
         marginHorizontal: 16,
-        marginTop: 8
+        marginTop: 4,
+    },
+
+    InputImp: {
+        color: 'white',
+        fontSize: 24,
+        backgroundColor: '#3D3D3D',
+        borderRadius: 5,
+        marginHorizontal: 16,
+        marginTop: 8,
+        textAlign: 'center'
     }
 });
