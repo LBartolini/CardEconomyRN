@@ -16,7 +16,28 @@ export default class NewTransaction extends React.Component {
     }
 
     sendNewTransaction = () => {
-        //TODO
+        let status;
+        let transObj = {
+            descrizione: this.state.descrizione,
+            giorno: this.state.date.getDate(),
+            mese: (this.state.date.getMonth()+1),
+            anno: this.state.date.getFullYear(),
+            importo: this.state.importo,
+            ricarica: this.state.ricaricaChecked
+        };
+
+        fetch('http://192.168.1.32:5000/new_transaction', {
+            method: 'post',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json, text/plain, */*',
+            },
+            body: JSON.stringify(transObj)
+          })
+            .then(response => response.json())
+            .then(data => status = data);
+        
+        this.props.navigation.navigate("home");
     }
 
     updateDateText = () => {
@@ -55,7 +76,7 @@ export default class NewTransaction extends React.Component {
                         <TextInput style={styles.InputDescr}
                             multiline={true}
                             maxHeight={80}
-                            onChangeText={(value) => this.setState({descrizione: value})}
+                            onChangeText={(value) => this.setState({ descrizione: value })}
                         ></TextInput>
                     </View>
 
@@ -78,19 +99,19 @@ export default class NewTransaction extends React.Component {
 
                     <View style={styles.Importo}>
                         <Text style={{ color: 'white', fontSize: 24, paddingLeft: 8 }}>Importo: </Text>
-                        <TextInput 
-                        style={styles.InputImp} 
-                        multiline={false} maxLength={13} 
-                        placeholderTextColor={"lightgray"} placeholder={"Inserisci importo..."}
-                        keyboardType={'numeric'}
-                        onChangeText={(value) => this.setState({importo: value})}
+                        <TextInput
+                            style={styles.InputImp}
+                            multiline={false} maxLength={13}
+                            placeholderTextColor={"lightgray"} placeholder={"Inserisci importo..."}
+                            keyboardType={'numeric'}
+                            onChangeText={(value) => this.setState({ importo: value })}
                         ></TextInput>
                     </View>
 
                     <View style={styles.Ricarica}>
                         <Text style={{ color: 'white', fontSize: 24, paddingLeft: 8 }}>Ricarica: </Text>
                         <CheckBox
-                        style={{ marginRight: 24 }}
+                            style={{ marginRight: 24 }}
                             checkBoxColor={'white'}
                             onClick={() => {
                                 this.setState({
@@ -110,11 +131,12 @@ export default class NewTransaction extends React.Component {
                                 borderWidth: 1,
                                 marginRight: 16
                             }}
-                            >
-                            <Text style={{ color: 'white', 
-                                    fontSize: 24, 
-                                    padding: 20, 
-                                    }}>Conferma </Text>
+                        >
+                            <Text style={{
+                                color: 'white',
+                                fontSize: 24,
+                                padding: 20,
+                            }}>Conferma </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -179,6 +201,7 @@ const styles = StyleSheet.create({
     },
 
     InputDescr: {
+        flex: 1,
         color: 'white',
         fontSize: 24,
         backgroundColor: '#3D3D3D',
@@ -189,9 +212,10 @@ const styles = StyleSheet.create({
 
     InputImp: {
         color: 'white',
-        fontSize: 24,
+        fontSize: 22,
         backgroundColor: '#3D3D3D',
         borderRadius: 5,
+        paddingVertical: 4,
         marginHorizontal: 16,
         marginTop: 8,
         textAlign: 'center'

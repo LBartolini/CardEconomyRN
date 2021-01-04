@@ -6,12 +6,11 @@ app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
 
-@app.route('/', methods=['GET'])
+@app.route('/new_transaction', methods=['POST'])
 def home():
-    return jsonify({
-        "id": 0,
-        "prova": "blabal"
-    })
+    data = request.json
+
+    return jsonify({"status": 1})
 
 
-app.run()
+app.run(host='0.0.0.0')
