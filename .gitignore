@@ -1,0 +1,7 @@
+/backend/bin
+/backend/include
+/backend/lib
+/backend/lib64
+/backend/share
+/backend/pyvenv.cfg
+.vscode
