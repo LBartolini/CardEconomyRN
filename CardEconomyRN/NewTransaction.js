@@ -16,7 +16,6 @@ export default class NewTransaction extends React.Component {
     }
 
     sendNewTransaction = () => {
-        let status;
         let transObj = {
             descrizione: this.state.descrizione,
             giorno: this.state.date.getDate(),
@@ -26,7 +25,7 @@ export default class NewTransaction extends React.Component {
             ricarica: this.state.ricaricaChecked
         };
 
-        fetch('http://192.168.1.32:5000/new_transaction', {
+        fetch('http://192.168.1.5:5000/new_transaction', {
             method: 'post',
             headers: {
               'Content-Type': 'application/json',
@@ -35,7 +34,7 @@ export default class NewTransaction extends React.Component {
             body: JSON.stringify(transObj)
           })
             .then(response => response.json())
-            .then(data => status = data);
+            .then(data => {});
         
         this.props.navigation.navigate("home");
     }
@@ -208,6 +207,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginHorizontal: 16,
         marginTop: 4,
+        paddingLeft: 6
     },
 
     InputImp: {

@@ -4,11 +4,28 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 export default class FlatItem extends React.Component {
 
-    removeTransaction = () => {
-        //TODO
+    removeTransaction = (id) => {
+        let transObj = {
+            id: id
+        };
+
+        fetch('http://192.168.1.5:5000/del_transaction', {
+            method: 'post',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json, text/plain, */*',
+            },
+            body: JSON.stringify(transObj)
+          })
+            .then(response => response.json())
+            .then(data => {
+                this.props.refresh();
+            });
+
     }
 
     render() {
+        const id = this.props.id;
         const descrizione = this.props.descr;
         const data = this.props.data;
         const costo = this.props.costo;
@@ -18,15 +35,15 @@ export default class FlatItem extends React.Component {
             <View style={styles.Transaction}>
                 <View style={styles.ViewDescr}>
                     <Text style={{ color: 'white', fontSize: 16, flex: 2 }}>{data}</Text>
-                    <SafeAreaView style={{flex: 3}}>
+                    <SafeAreaView style={{flex: 4}}>
                         <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent : 'center'}}>
                             <Text style={{ color: 'white', fontSize: 16 }}>{descrizione}</Text>
                         </ScrollView>
                     </SafeAreaView>
-                    <Text style={{ color: (ricarica ? 'green' : 'orange'), fontSize: 18, flex: 1 }}>{(ricarica ? '' : '-')}{costo} €</Text>
+                    <Text style={{ color: (ricarica ? 'green' : 'orange'), fontSize: 16, flex: 2 }}>{(ricarica ? '' : '-')}{costo} €</Text>
                 </View>
                 <View style={styles.ViewButton}>
-                    <TouchableOpacity onPress={() => this.removeTransaction()}>
+                    <TouchableOpacity onPress={() => this.removeTransaction(id)}>
                         <MaterialCommunityIcons color={'lightblue'} size={35} name="minus-box" style={{ alignSelf: 'flex-end' }} />
                     </TouchableOpacity>
                 </View>

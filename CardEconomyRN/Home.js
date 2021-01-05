@@ -7,24 +7,41 @@ import FlatItem from './FlatItem';
 export default class Home extends React.Component {
     state = {
         isRefreshing: false,
-        transactions: [
-            {
-                id: '0',
-                descr: 'pluto',
-                costo: '159',
-                data: '19/09/2020',
-                ricarica: false
-            }
-        ],
+        transactions: [],
+        total: 0
     }
 
     onRefresh = () => {
-        //TODO
-        this.setState({isRefreshing: false});
+        fetch('http://192.168.1.5:5000/get_all', {
+            method: 'get',
+            headers: {
+              'Accept': 'application/json, text/plain, */*',
+            }
+          })
+            .then(response => response.json())
+            .then(data => {
+                this.setState({ transactions: data.reverse() });
+            });
+        
+        fetch('http://192.168.1.5:5000/compute_total', {
+                method: 'get',
+                headers: {
+                  'Accept': 'application/json, text/plain, */*',
+                }
+              })
+                .then(response => response.json())
+                .then(data => {
+                    this.setState({ total: data.total });
+                    this.setState({ isRefreshing: false });
+                });
+    }
+
+    componentWillMount() {
+        this.onRefresh();
     }
 
     renderItem = ({ item }) => {
-        return (<FlatItem descr={item.descr} costo={item.costo} data={item.data} ricarica={item.ricarica}/>);
+        return (<FlatItem descr={item.descr} costo={item.importo} data={item.data} ricarica={item.ricarica} id={item.id} refresh={this.onRefresh} />);
     }
 
     render() {
@@ -32,7 +49,7 @@ export default class Home extends React.Component {
             <View style={styles.Body}>
                 <View style={styles.Header}>
                     <View style={styles.ViewSaldo}>
-                        <Text style={styles.TextSaldo}>5000€</Text>
+                        <Text style={styles.TextSaldo}>{this.state.total} €</Text>
                     </View>
                     <View style={styles.ViewButton}>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate("new-transaction")}>
@@ -47,7 +64,7 @@ export default class Home extends React.Component {
                         renderItem={this.renderItem}
                         keyExtractor={item => item.id}
                         refreshing={this.state.isRefreshing}
-                        onRefresh={() => this.onRefresh}
+                        onRefresh={() => { this.onRefresh() }}
                     />
                 </SafeAreaView>
                 <StatusBar style="light" />
