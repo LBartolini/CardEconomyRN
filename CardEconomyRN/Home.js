@@ -12,7 +12,7 @@ export default class Home extends React.Component {
     }
 
     onRefresh = () => {
-        fetch('http://192.168.1.5:5000/get_all', {
+        fetch('http://lbartolini.pythonanywhere.com/get_all', {
             method: 'get',
             headers: {
               'Accept': 'application/json, text/plain, */*',
@@ -23,7 +23,7 @@ export default class Home extends React.Component {
                 this.setState({ transactions: data.reverse() });
             });
         
-        fetch('http://192.168.1.5:5000/compute_total', {
+        fetch('http://lbartolini.pythonanywhere.com/compute_total', {
                 method: 'get',
                 headers: {
                   'Accept': 'application/json, text/plain, */*',
@@ -49,7 +49,7 @@ export default class Home extends React.Component {
             <View style={styles.Body}>
                 <View style={styles.Header}>
                     <View style={styles.ViewSaldo}>
-                        <Text style={styles.TextSaldo}>{this.state.total} €</Text>
+                        <Text style={styles.TextSaldo}>{this.state.total.toFixed(2)} €</Text>
                     </View>
                     <View style={styles.ViewButton}>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate("new-transaction")}>

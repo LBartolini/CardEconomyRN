@@ -9,7 +9,7 @@ export default class FlatItem extends React.Component {
             id: id
         };
 
-        fetch('http://192.168.1.5:5000/del_transaction', {
+        fetch('http://lbartolini.pythonanywhere.com/del_transaction', {
             method: 'post',
             headers: {
               'Content-Type': 'application/json',
