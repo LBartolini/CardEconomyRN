@@ -53,7 +53,7 @@ def get_all():
         out.append({
             "id": str(el[0]),
             "descr": str(el[1]),
-            "data": f"{str(el[2])}/{str(el[3])}/{str(el[4])}",
+            "data": f"{str(el[2])}/{str(el[3])}/{str(el[4][-2:])}",
             "importo": str(el[5]),
             "ricarica": el[6]
         })
