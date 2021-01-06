@@ -25,6 +25,10 @@ export default class NewTransaction extends React.Component {
             ricarica: this.state.ricaricaChecked
         };
 
+        if(transObj.descrizione === "" || transObj.importo === ""){
+            return;
+        }
+
         fetch('http://lbartolini.pythonanywhere.com/new_transaction', { //http://192.168.1.5:5000/new_transaction
             method: 'post',
             headers: {
@@ -217,6 +221,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         paddingVertical: 4,
         marginHorizontal: 16,
+        paddingHorizontal: 8,
         marginTop: 8,
         textAlign: 'center'
     }

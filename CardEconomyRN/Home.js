@@ -7,6 +7,7 @@ import FlatItem from './FlatItem';
 export default class Home extends React.Component {
     state = {
         isRefreshing: false,
+        totalVisible: false,
         transactions: [],
         total: 0
     }
@@ -36,7 +37,7 @@ export default class Home extends React.Component {
                 });
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.onRefresh();
     }
 
@@ -48,16 +49,21 @@ export default class Home extends React.Component {
         return (
             <View style={styles.Body}>
                 <View style={styles.Header}>
-                    <View style={styles.ViewSaldo}>
-                        <Text style={styles.TextSaldo}>{this.state.total.toFixed(2)} €</Text>
+                    <View style={styles.ViewButtonLeft}>
+                        <TouchableOpacity onPress={() => this.setState({ totalVisible: !(this.state.totalVisible) })}>
+                            <MaterialCommunityIcons name={ (this.state.totalVisible ? "eye-off-outline" : "eye-outline") } color={"lightgreen"} size={40} />
+                        </TouchableOpacity>
                     </View>
-                    <View style={styles.ViewButton}>
+                    <View style={styles.ViewSaldo}>
+                        <Text style={styles.TextSaldo}>{ (this.state.totalVisible ? this.state.total.toFixed(2) : "-----" ) } €</Text>
+                    </View>
+                    <View style={styles.ViewButtonRight}>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate("new-transaction")}>
                             <MaterialCommunityIcons name="plus" color={"lightgreen"} size={45} />
                         </TouchableOpacity>
                     </View>
-
                 </View>
+
                 <SafeAreaView style={styles.Flat}>
                     <FlatList
                         data={this.state.transactions}
@@ -102,9 +108,16 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
 
-    ViewButton: {
+    ViewButtonRight: {
         flex: 1,
         paddingRight: 8,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
+    ViewButtonLeft: {
+        flex: 1,
+        paddingLeft: 12,
         alignItems: 'center',
         justifyContent: 'center'
     }
