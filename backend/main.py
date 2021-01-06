@@ -1,42 +1,51 @@
 import flask
 from flask import request, jsonify
-import sqlite3
+import mysql.connector
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
 
+def getDBConnection():
+    mydb = mysql.connector.connect(
+    host="LBartolini.mysql.pythonanywhere-services.com",
+    user="LBartolini",
+    password="lorebart",
+    database="LBartolini$default")
+
+    return mydb
 
 @app.route('/new_transaction', methods=['POST'])
 def new_transaction():
     data = request.json
-    conn = sqlite3.connect('transactions.db')
-    c = conn.cursor()
-    args_db = ( data['descrizione'],   
-                data['giorno'], 
-                data['mese'], 
-                data['anno'], 
-                data['importo'], 
+    mydb = getDBConnection()
+    c = mydb.cursor()
+
+    args_db = ( data['descrizione'],
+                data['giorno'],
+                data['mese'],
+                data['anno'],
+                data['importo'],
                 data['ricarica'])
-    c.execute('INSERT INTO tr ( descrizione, giorno, mese, anno, importo, ricarica ) VALUES (?, ?, ?, ?, ?, ?);', args_db)
-    conn.commit()
-    conn.close()
+    c.execute("INSERT INTO tr ( descrizione, giorno, mese, anno, importo, ricarica ) VALUES (%s, %s, %s, %s, %s, %s);", args_db)
+    mydb.commit()
+    c.close()
+    mydb.close()
     return jsonify({"status": 1})
 
 @app.route('/del_transaction', methods=['POST'])
 def del_transaction():
     data = request.json
-    print(data)
-    conn = sqlite3.connect('transactions.db')
-    c = conn.cursor()
-    c.execute('DELETE FROM tr WHERE id=?;', (data["id"]))
-    conn.commit()
-    conn.close()
+    mydb = getDBConnection()
+    c = mydb.cursor()
+    c.execute("DELETE FROM tr WHERE id=%s", (data['id'],))
+    mydb.commit()
+    c.close()
+    mydb.close()
     return jsonify({"status": 1})
 
 @app.route('/get_all', methods=['GET'])
 def get_all():
-    conn = sqlite3.connect('transactions.db')
-    c = conn.cursor()
+    mydb = getDBConnection()
+    c = mydb.cursor()
     c.execute('SELECT * FROM tr;')
     x = c.fetchall()
     out = []
@@ -48,17 +57,16 @@ def get_all():
             "importo": str(el[5]),
             "ricarica": el[6]
         })
-    conn.close()
-
+    c.close()
+    mydb.close()
     return jsonify(out)
 
 @app.route('/compute_total', methods=['GET'])
 def compute_total():
-    conn = sqlite3.connect('transactions.db')
-    c = conn.cursor()
+    mydb = getDBConnection()
+    c = mydb.cursor()
     c.execute('SELECT * FROM tr;')
     x = c.fetchall()
-    conn.close()
     importi = [(el[5], el[6]) for el in x]
     total = 0
     for imp, ric in importi:
@@ -66,7 +74,8 @@ def compute_total():
             total += imp
         else:
             total -= imp
-
+    c.close()
+    mydb.close()
     return jsonify({"total": total})
 
-app.run(host='0.0.0.0')
+#app.run(host='0.0.0.0', port='80')
