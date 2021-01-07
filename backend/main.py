@@ -1,6 +1,7 @@
 import flask
 from flask import request, jsonify
 import mysql.connector
+from datetime import datetime
 
 app = flask.Flask(__name__)
 
@@ -42,6 +43,8 @@ def del_transaction():
     mydb.close()
     return jsonify({"status": 1})
 
+
+#TODO invertire queste due funzioni
 @app.route('/get_all', methods=['GET'])
 def get_all():
     mydb = getDBConnection()
@@ -59,6 +62,28 @@ def get_all():
         })
     c.close()
     mydb.close()
+    out.sort(key=lambda transazione: datetime.strptime(transazione["data"], "%d/%m/%y"))
+    out = out[-20:]
+    return jsonify(out)
+
+@app.route('/get_partial', methods=['GET'])
+def get_partial():
+    mydb = getDBConnection()
+    c = mydb.cursor()
+    c.execute('SELECT * FROM tr;')
+    x = c.fetchall()
+    out = []
+    for el in x:
+        out.append({
+            "id": str(el[0]),
+            "descr": str(el[1]),
+            "data": f"{str(el[2])}/{str(el[3])}/{str(el[4])[-2:]}",
+            "importo": str(el[5]),
+            "ricarica": el[6]
+        })
+    c.close()
+    mydb.close()
+    out.sort(key=lambda transazione: datetime.strptime(transazione["data"], "%d/%m/%y"))
     return jsonify(out)
 
 @app.route('/compute_total', methods=['GET'])
