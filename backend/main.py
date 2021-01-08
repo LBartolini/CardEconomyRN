@@ -43,10 +43,8 @@ def del_transaction():
     mydb.close()
     return jsonify({"status": 1})
 
-
-#TODO invertire queste due funzioni
-@app.route('/get_all', methods=['GET'])
-def get_all():
+@app.route('/get_partial', methods=['GET'])
+def get_partial():
     mydb = getDBConnection()
     c = mydb.cursor()
     c.execute('SELECT * FROM tr;')
@@ -66,8 +64,8 @@ def get_all():
     out = out[-20:]
     return jsonify(out)
 
-@app.route('/get_partial', methods=['GET'])
-def get_partial():
+@app.route('/get_all', methods=['GET'])
+def get_all():
     mydb = getDBConnection()
     c = mydb.cursor()
     c.execute('SELECT * FROM tr;')

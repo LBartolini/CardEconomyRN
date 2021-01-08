@@ -4,16 +4,14 @@ import { StyleSheet, Text, View, FlatList, SafeAreaView, TouchableOpacity } from
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FlatItem from './FlatItem';
 
-export default class Home extends React.Component {
+export default class TransactionHistory extends React.Component {
     state = {
         isRefreshing: false,
-        totalVisible: false,
         transactions: [],
-        total: 0
     }
 
     onRefresh = () => {
-        fetch('http://lbartolini.pythonanywhere.com/get_partial', {
+        fetch('http://lbartolini.pythonanywhere.com/get_all', {
             method: 'get',
             headers: {
               'Accept': 'application/json, text/plain, */*',
@@ -23,18 +21,6 @@ export default class Home extends React.Component {
             .then(data => {
                 this.setState({ transactions: data.reverse() });
             });
-        
-        fetch('http://lbartolini.pythonanywhere.com/compute_total', {
-                method: 'get',
-                headers: {
-                  'Accept': 'application/json, text/plain, */*',
-                }
-              })
-                .then(response => response.json())
-                .then(data => {
-                    this.setState({ total: data.total });
-                    this.setState({ isRefreshing: false });
-                });
     }
 
     componentDidMount() {
@@ -49,17 +35,9 @@ export default class Home extends React.Component {
         return (
             <View style={styles.Body}>
                 <View style={styles.Header}>
-                    <View style={styles.ViewButtonLeft}>
-                        <TouchableOpacity onPress={() => this.setState({ totalVisible: !(this.state.totalVisible) })}>
-                            <MaterialCommunityIcons name={ (this.state.totalVisible ? "eye-off-outline" : "eye-outline") } color={"lightgreen"} size={40} />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.ViewSaldo}>
-                        <Text style={styles.TextSaldo}>{ (this.state.totalVisible ? this.state.total.toFixed(2) : "-----" ) } €</Text>
-                    </View>
                     <View style={styles.ViewButtonRight}>
-                        <TouchableOpacity onPress={() => this.props.navigation.toggleDrawer()}>
-                            <MaterialCommunityIcons name="menu" color={"lightgreen"} size={40} />
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('home')}>
+                            <MaterialCommunityIcons name="keyboard-backspace" color={"lightgreen"} size={40} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -97,28 +75,11 @@ const styles = StyleSheet.create({
         width: '100%',
     },
 
-    TextSaldo: {
-        color: 'white',
-        fontSize: 45
-    },
-
-    ViewSaldo: {
-        flex: 5,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
 
     ViewButtonRight: {
         flex: 1,
         paddingRight: 8,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-
-    ViewButtonLeft: {
-        flex: 1,
-        paddingLeft: 12,
-        alignItems: 'center',
+        alignItems: 'flex-end',
         justifyContent: 'center'
     }
 });
