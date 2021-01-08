@@ -17,10 +17,10 @@ export default function App() {
         drawerPosition={'right'}
         drawerType={'front'}
         drawerContent={ props => <DrawerMenu {...props}/> }
-      >
-        <Drawer.Screen name="home" component={Home} />
-        <Drawer.Screen name="history" component={TransactionHistory} />
-        <Drawer.Screen name="new-transaction" component={NewTransaction} />
+        >
+        <Drawer.Screen name="home" component={Home} options={{ swipeEnabled: false }}/>
+        <Drawer.Screen name="history" component={TransactionHistory} options={{ swipeEnabled: false }}/>
+        <Drawer.Screen name="new-transaction" component={NewTransaction} options={{ swipeEnabled: false }}/>
       </Drawer.Navigator>
     </NavigationContainer>
   );
