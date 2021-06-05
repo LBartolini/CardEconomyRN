@@ -8,6 +8,7 @@ app = flask.Flask(__name__)
 def getDBConnection():
     mydb = mysql.connector.connect(
     host="192.168.1.10",
+	port="14269",
     user="cardeconomy",
     password="cardeconomy",
     database="CardEconomy")
