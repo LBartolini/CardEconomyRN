@@ -11,7 +11,7 @@ export default class TransactionHistory extends React.Component {
     }
 
     onRefresh = () => {
-        fetch('http://lbartolini.pythonanywhere.com/get_all', {
+        fetch('http://lbartolini.ddns.net:5000/get_all', {
             method: 'get',
             headers: {
               'Accept': 'application/json, text/plain, */*',

@@ -13,7 +13,7 @@ export default class Home extends React.Component {
     }
 
     onRefresh = () => {
-        fetch('http://lbartolini.pythonanywhere.com/get_partial', {
+        fetch('http://lbartolini.ddns.net:5000/get_partial', {
             method: 'get',
             headers: {
               'Accept': 'application/json, text/plain, */*',
@@ -24,7 +24,7 @@ export default class Home extends React.Component {
                 this.setState({ transactions: data.reverse() });
             });
         
-        fetch('http://lbartolini.pythonanywhere.com/compute_total', {
+        fetch('http://lbartolini.ddns.net:5000/compute_total', {
                 method: 'get',
                 headers: {
                   'Accept': 'application/json, text/plain, */*',

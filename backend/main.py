@@ -7,10 +7,10 @@ app = flask.Flask(__name__)
 
 def getDBConnection():
     mydb = mysql.connector.connect(
-    host="LBartolini.mysql.pythonanywhere-services.com",
-    user="LBartolini",
-    password="lorebart",
-    database="LBartolini$default")
+    host="192.168.1.10",
+    user="cardeconomy",
+    password="cardeconomy",
+    database="CardEconomy")
 
     return mydb
 
@@ -101,4 +101,5 @@ def compute_total():
     mydb.close()
     return jsonify({"total": total})
 
-#app.run(host='0.0.0.0', port='80')
+if __name__ == "__main__":
+	app.run(host='0.0.0.0', port='5000')

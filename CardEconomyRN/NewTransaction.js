@@ -29,7 +29,7 @@ export default class NewTransaction extends React.Component {
             return;
         }
 
-        fetch('http://lbartolini.pythonanywhere.com/new_transaction', { //http://192.168.1.5:5000/new_transaction
+        fetch('http://lbartolini.ddns.net:5000/new_transaction', {
             method: 'post',
             headers: {
               'Content-Type': 'application/json',
